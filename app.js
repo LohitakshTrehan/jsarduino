@@ -29,6 +29,22 @@ board.on("ready", function() {
 
 app.get('/sensor',function(req,res){
     console.log(sensor.scaleTo(0,500))
+    let val = sensor.scaleTo(0,500)
+    if(val>400){
+        led_1.on();led_2.off();led_3.off();led_4.off();led_5.off();
+    }
+    else if(val>300){
+        led_1.on();led_2.on();led_3.off();led_4.off();led_5.off();
+    }
+    else if(val>200){
+        led_1.on();led_2.on();led_3.on();led_4.off();led_5.off();
+    }
+    else if(val>100){
+        led_1.on();led_2.on();led_3.on();led_4.on();led_5.off();
+    }
+    else{
+        led_1.on();led_2.on();led_3.on();led_4.on();led_5.on();
+    }
     res.send("OK")
 })
 app.get('/led_1/:mode', function (req, res) {

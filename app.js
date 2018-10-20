@@ -1,23 +1,36 @@
 var five = require("johnny-five")
+var path = require('path')
+var express = require('express')
 var board = new five.Board()
 var led_1 = null
 var led_2 = null
 var led_3 = null
 var led_4 = null
 var led_5 = null
-var express = require('express')
+var sensor = null
 var app = express()
 var port = 8000
 
+app.use(express.static(path.join(__dirname, 'views')));
+app.set('views', './views')
+app.set('view engine', 'ejs')
+app.get('/',function(req,res){
+    res.render('index',{mode:'auto'});
+})
 board.on("ready", function() {
-  console.log("### Board ready!");
-  led_1 = new five.Led(13);
-  led_2 = new five.Led(8);
-  led_3 = new five.Led(7);
-  led_4 = new five.Led(4);
-  led_5 = new five.Led(2);
+    console.log("### Board ready!");
+    led_1 = new five.Led(13);
+    led_2 = new five.Led(8);
+    led_3 = new five.Led(7);
+    led_4 = new five.Led(4);
+    led_5 = new five.Led(2);
+    sensor = new five.Sensor("A0");
 });
 
+app.get('/sensor',function(req,res){
+    console.log(sensor.scaleTo(0,500))
+    res.send("OK")
+})
 app.get('/led_1/:mode', function (req, res) {
   if(led_1) {
     var status = "OK";

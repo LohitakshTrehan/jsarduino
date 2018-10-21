@@ -10,23 +10,28 @@ var led_5 = null
 var sensor = null
 var app = express()
 var port = 8000
-
+var mode = 1;
 app.use(express.static(path.join(__dirname, 'views')));
 app.set('views', './views')
 app.set('view engine', 'ejs')
-app.get('/',function(req,res){
-    res.render('index',{mode:'auto'});
-})
 board.on("ready", function() {
     console.log("### Board ready!");
-    led_1 = new five.Led(13);
+    led_1 = new five.Led(12);
     led_2 = new five.Led(8);
     led_3 = new five.Led(7);
     led_4 = new five.Led(4);
     led_5 = new five.Led(2);
     sensor = new five.Sensor("A0");
 });
-
+app.get('/change',function(req,res){
+  if(mode==1){
+    mode=0;
+  }
+  else{
+    mode=1;
+  }
+  res.send('OK');
+})
 app.get('/sensor',function(req,res){
     console.log(sensor.scaleTo(0,500))
     let val = sensor.scaleTo(0,500)
@@ -45,9 +50,12 @@ app.get('/sensor',function(req,res){
     else{
         led_1.on();led_2.on();led_3.on();led_4.on();led_5.on();
     }
-    res.send("OK")
+    res.send("OK");
 })
-app.get('/led_1/:mode', function (req, res) {
+app.get('/alloff',function(req,res){
+  led_1.off();led_2.off();led_3.off();led_4.off();led_5.off();
+})
+app.get('/led1/:mode', function (req, res) {
   if(led_1) {
     var status = "OK";
     switch(req.params.mode) {
@@ -61,13 +69,12 @@ app.get('/led_1/:mode', function (req, res) {
         status = "Unknown: " + req.params.mode;
         break;
      }
-     console.log(status);
-     res.send(status);
+     res.send(status);//////////////////
    } else {
-     res.send('Board NOT ready!')
+     res.send('Board NOT ready!')///////////////
    }
 });
-app.get('/led_2/:mode', function (req, res) {
+app.get('/led2/:mode', function (req, res) {
   if(led_2) {
     var status = "OK";
     switch(req.params.mode) {
@@ -87,7 +94,7 @@ app.get('/led_2/:mode', function (req, res) {
      res.send('Board NOT ready!')
    }
 });
-app.get('/led_3/:mode', function (req, res) {
+app.get('/led3/:mode', function (req, res) {
   if(led_3) {
     var status = "OK";
     switch(req.params.mode) {
@@ -107,7 +114,7 @@ app.get('/led_3/:mode', function (req, res) {
      res.send('Board NOT ready!')
    }
 });
-app.get('/led_4/:mode', function (req, res) {
+app.get('/led4/:mode', function (req, res) {
   if(led_4) {
     var status = "OK";
     switch(req.params.mode) {
@@ -127,7 +134,7 @@ app.get('/led_4/:mode', function (req, res) {
      res.send('Board NOT ready!')
    }
 });
-app.get('/led_5/:mode', function (req, res) {
+app.get('/led5/:mode', function (req, res) {
   if(led_5) {
     var status = "OK";
     switch(req.params.mode) {
@@ -147,7 +154,12 @@ app.get('/led_5/:mode', function (req, res) {
      res.send('Board NOT ready!')
    }
 });
-
+app.get('/',function(req,res){
+  if(mode==1)
+    res.render('manual');
+  if(mode==0)
+    res.render('auto')
+})
 app.listen(port, function () {
  console.log('Listening on port ' + port);
 });

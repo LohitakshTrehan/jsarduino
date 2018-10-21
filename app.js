@@ -30,30 +30,36 @@ app.get('/change',function(req,res){
   else{
     mode=1;
   }
-  res.send('OK');
+  res.sendStatus('OK');
 })
 app.get('/sensor',function(req,res){
+
     console.log(sensor.scaleTo(0,500))
     let val = sensor.scaleTo(0,500)
-    if(val>400){
-        led_1.on();led_2.off();led_3.off();led_4.off();led_5.off();
+    if(val==500){
+      led_1.off();led_2.off();led_3.off();led_4.off();led_5.off();
+    }
+    else if(val>400){
+      led_1.on();led_2.off();led_3.off();led_4.off();led_5.off();
     }
     else if(val>300){
-        led_1.on();led_2.on();led_3.off();led_4.off();led_5.off();
+      led_1.on();led_2.on();led_3.off();led_4.off();led_5.off();
     }
     else if(val>200){
-        led_1.on();led_2.on();led_3.on();led_4.off();led_5.off();
+      led_1.on();led_2.on();led_3.on();led_4.off();led_5.off();
     }
     else if(val>100){
-        led_1.on();led_2.on();led_3.on();led_4.on();led_5.off();
+      led_1.on();led_2.on();led_3.on();led_4.on();led_5.off();
     }
     else{
-        led_1.on();led_2.on();led_3.on();led_4.on();led_5.on();
+      led_1.on();led_2.on();led_3.on();led_4.on();led_5.on();
     }
-    res.send("OK");
+    val+="";
+    res.end(val);
 })
 app.get('/alloff',function(req,res){
   led_1.off();led_2.off();led_3.off();led_4.off();led_5.off();
+  res.sendStatus("OK");
 })
 app.get('/led1/:mode', function (req, res) {
   if(led_1) {
@@ -69,9 +75,9 @@ app.get('/led1/:mode', function (req, res) {
         status = "Unknown: " + req.params.mode;
         break;
      }
-     res.send(status);//////////////////
+     res.sendStatus(status);//////////////////
    } else {
-     res.send('Board NOT ready!')///////////////
+     res.sendStatus('Board NOT ready!')///////////////
    }
 });
 app.get('/led2/:mode', function (req, res) {
@@ -89,9 +95,9 @@ app.get('/led2/:mode', function (req, res) {
         break;
      }
      console.log(status);
-     res.send(status);
+     res.sendStatus(status);
    } else {
-     res.send('Board NOT ready!')
+     res.sendStatus('Board NOT ready!')
    }
 });
 app.get('/led3/:mode', function (req, res) {
@@ -109,9 +115,9 @@ app.get('/led3/:mode', function (req, res) {
         break;
      }
      console.log(status);
-     res.send(status);
+     res.sendStatus(status);
    } else {
-     res.send('Board NOT ready!')
+     res.sendStatus('Board NOT ready!')
    }
 });
 app.get('/led4/:mode', function (req, res) {
@@ -129,9 +135,9 @@ app.get('/led4/:mode', function (req, res) {
         break;
      }
      console.log(status);
-     res.send(status);
+     res.sendStatus(status);
    } else {
-     res.send('Board NOT ready!')
+     res.sendStatus('Board NOT ready!')
    }
 });
 app.get('/led5/:mode', function (req, res) {
@@ -149,9 +155,9 @@ app.get('/led5/:mode', function (req, res) {
         break;
      }
      console.log(status);
-     res.send(status);
+     res.sendStatus(status);
    } else {
-     res.send('Board NOT ready!')
+     res.sendStatus('Board NOT ready!')
    }
 });
 app.get('/',function(req,res){

@@ -9,7 +9,8 @@ $(window).on('load', function () {
     document.getElementById('led1').onclick = function(){
         var state = document.getElementById('led1t').innerHTML.toString()
         if(state=="Currently LED1 is OFF"){
-            $.get('/led1/on',function(){
+            $.get('/led1/on',function(data){
+                console.log("here is "+data)
                 document.getElementById('led1t').innerHTML="Currently LED1 is ON"
             })
         }

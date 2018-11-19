@@ -9,8 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "date-and-time": "^0.6.3",
     "ejs": "^2.6.1",
     "express": "^4.16.3",
-    "johnny-five": "^1.0.0"
+    "johnny-five": "^1.0.0",
+    "libsvm-js": "^0.2.1"
   }
 }
